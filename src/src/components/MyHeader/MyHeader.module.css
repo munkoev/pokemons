@@ -1,0 +1,9 @@
+.myheader {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.inp {
+    margin-top: 10px;
+}
