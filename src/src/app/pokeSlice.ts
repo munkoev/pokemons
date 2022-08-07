@@ -4,7 +4,7 @@ import { AxiosResponse } from "axios";
 
 export interface IpokeCard {
     name: string,
-    id: string,
+    id: number,
     front_default: string
     abilities: {
         ability: {
@@ -18,10 +18,12 @@ export interface IpokeCard {
 
 export interface IpokeState {
     cards: IpokeCard[]
+    total_added: number,
 }
 
 const initialState: IpokeState = {
-    cards: []
+    cards: [],
+    total_added: 0
 }
 
 export const pokeSlice = createSlice({
@@ -29,9 +31,10 @@ export const pokeSlice = createSlice({
     initialState,
     reducers: {
         add: (state, action: PayloadAction<AxiosResponse<any, any>>) => {
+            state.total_added += 1;
             const newpoke: IpokeCard = {
                 name: action.payload.data.name,
-                id: action.payload.data.id,
+                id: state.total_added,
                 front_default: action.payload.data.sprites.front_default,
                 abilities: [...action.payload.data.abilities]
             }
@@ -40,9 +43,12 @@ export const pokeSlice = createSlice({
         remove: (state, action: PayloadAction<IpokeCard>) => {
             state.cards = [...state.cards.filter((el) => el.id !== action.payload.id)]
         },
+        hydrate: (state, action) => {
+            return action.payload
+        }
     }
 })
 
-export const { add, remove } = pokeSlice.actions;
+export const { add, remove, hydrate } = pokeSlice.actions;
 
 export default pokeSlice.reducer;

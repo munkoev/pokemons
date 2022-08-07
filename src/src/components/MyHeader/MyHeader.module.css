@@ -2,8 +2,37 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    padding-bottom: 10px;
+    background-color: white;
 }
 
 .inp {
     margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.success {
+    color: green;
+}
+
+.fail {
+    color: lightcoral;
+}
+
+.disappear {
+    animation: anim 3s ease-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes anim {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.ph {
+    color: transparent;
 }
