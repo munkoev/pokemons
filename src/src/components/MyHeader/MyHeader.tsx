@@ -22,7 +22,7 @@ const MyHeader = () => {
             const fetched_poke = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
             const f = fetched_poke.data.results.find((e: IfetchedPokemon) => e.name === val)
             if (f) {
-                setStatus('Successfully added pokemon ' + val);
+                setStatus('Successfully added pokemon ' + val + ' from text input');
                 const data = await axios.get(f.url);
                 dispatch(add(data));
             } else {
