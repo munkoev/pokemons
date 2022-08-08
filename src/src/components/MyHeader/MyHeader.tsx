@@ -28,6 +28,7 @@ const MyHeader = () => {
         } else {
             setStatus('No such pokemon ' + val);
         }
+        (document?.activeElement as HTMLElement).blur();
     }
 
     const inputPressEnterHandler = async (e: React.KeyboardEvent) => {
