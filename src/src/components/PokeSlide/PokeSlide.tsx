@@ -14,10 +14,14 @@ const PokeSlide = () => {
     const [offset, setOffset] = useState(0);
     const arr: any[] = [];
     const [pokes, setPokes] = useState(arr);
-
+    const [slidesNum, setSlidesNum] = useState(window.innerWidth < 650 ? 3 : 5)
+    window.onresize = () => {
+        setSlidesNum(window.innerWidth < 650 ? 3 : 5);
+    }
+    
     useEffect(() => {
         const getPokes = async () => {
-            const fetched_pokes = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=5&offset=${offset}`);
+            const fetched_pokes = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${slidesNum}&offset=${offset}`);
             const res = [...fetched_pokes.data.results];
             for (const e of res) {
                 e.sprite =  (await axios.get(e.url)).data.sprites.front_default
@@ -26,16 +30,16 @@ const PokeSlide = () => {
         }
         getPokes()
         .catch(console.error)
-    }, [offset])
+    }, [offset, slidesNum])
 
     const onLeftArrClick = () => {
         if (offset !== 0) {
-            setOffset(offset - 5);
+            setOffset(offset - slidesNum);
         }
     }
     const onRightArrClick = () => {
         if (offset <= 1150) {
-            setOffset(offset + 5);
+            setOffset(offset + slidesNum);
         }
     }
 
