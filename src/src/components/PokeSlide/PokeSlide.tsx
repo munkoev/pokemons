@@ -1,66 +1,30 @@
-import React, { useEffect, useState } from 'react'
 import styles from './PokeSlide.module.css'
-import axios from "axios";
-import { useAppDispatch } from '../../app/hooks';
-import { add } from '../../app/pokeSlice';
+import usePokeSlideHook, { IfetchedPokemon } from './PokeSlide.hooks';
 
-interface IfetchedPokemon {
-    name: string,
-    url: string,
-    sprite?: string
+interface IPokePreviewCardProps {
+    item: IfetchedPokemon,
+    onCardClickHandler: (el: IfetchedPokemon) => Promise<void>
+}
+
+const PokePreviewCard = ({ item, onCardClickHandler}: IPokePreviewCardProps) => {
+    return (<div
+        key={item.name}
+        className={[styles.smallcard, styles.noselect].join(' ')}
+        onClick={() => onCardClickHandler(item)}>
+        <img width="30px" height="30px" alt="" src={item.sprite}/>
+        <div className={"pokename"}>{item.name}</div>
+    </div>)
 }
 
 const PokeSlide = () => {
-    const [offset, setOffset] = useState(0);
-    const arr: any[] = [];
-    const [pokes, setPokes] = useState(arr);
-    const [slidesNum, setSlidesNum] = useState(window.innerWidth < 650 ? 3 : 5)
-    window.onresize = () => {
-        setSlidesNum(window.innerWidth < 650 ? 3 : 5);
-    }
+    const { pokes, onLeftArrClick, onCardClickHandler, onRightArrClick } = usePokeSlideHook();
     
-    useEffect(() => {
-        const getPokes = async () => {
-            const fetched_pokes = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${slidesNum}&offset=${offset}`);
-            const res = [...fetched_pokes.data.results];
-            for (const e of res) {
-                e.sprite =  (await axios.get(e.url)).data.sprites.front_default
-            }
-            setPokes(res);
-        }
-        getPokes()
-        .catch(console.error)
-    }, [offset, slidesNum])
-
-    const onLeftArrClick = () => {
-        if (offset !== 0) {
-            setOffset(offset - slidesNum);
-        }
-    }
-    const onRightArrClick = () => {
-        if (offset <= 1150) {
-            setOffset(offset + slidesNum);
-        }
-    }
-
-    const dispatch = useAppDispatch();
-    const onCardClickHandler = async (el: IfetchedPokemon) => {
-        const data = await axios.get(el.url);
-        dispatch(add(data));
-    }
-
     return (<div className={styles.wrapper}>
         <div className={[styles.arrow, styles.noselect].join(' ')}
             onClick={onLeftArrClick}>{'<'}</div>
         <div className={styles.list}>
             {pokes.map(e => {
-                return (<div
-                            key={e.name}
-                            className={[styles.smallcard, styles.noselect].join(' ')}
-                            onClick={onCardClickHandler.bind(null, e)}>
-                        <img width="20px" height="20px" alt="" src={e.sprite}/>
-                        <div className={"pokename"}>{e.name}</div>
-                    </div>)
+                return (<PokePreviewCard item={e} onCardClickHandler={onCardClickHandler}/>)
             })}
         </div>
         <div className={[styles.arrow, styles.noselect].join(' ')}

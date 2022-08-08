@@ -1,14 +1,12 @@
-import React from "react";
-import { useSelector } from "react-redux";
 import styles from './PokeList.module.css'
-import { RootState } from '../../app/store'
 import PokeCard from '../PokeCard/PokeCard'
+import { useAppSelector } from "../../app/hooks";
 
 const PokeList = () => {
-    const state = useSelector((state:RootState) => state);
+    const cards = useAppSelector(state => state.poke.cards)
 
     return (<div className={styles.list}>
-        {state.poke.cards.map((e,i) => {
+        {cards.map((e,i) => {
             return (<PokeCard card={e} key={i}/>)
         })}
     </div>)
