@@ -1,0 +1,40 @@
+.myheader {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-bottom: 10px;
+    background-color: white;
+
+    .inp_wrapper {
+        height: 25px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border: 1px solid black;
+        border-radius: 2px;
+        display: flex;
+
+        .inp {
+            width: 100%;
+            border: 0;
+        }
+        
+        .inp:focus {
+            outline: none;
+        }
+
+        .img {
+            width: 25px;
+            height: 100%;
+            cursor: pointer;
+            padding: 2px;
+        }
+    }
+
+    .success {
+        color: green;
+    }
+    
+    .fail {
+        color: lightcoral;
+    }
+}

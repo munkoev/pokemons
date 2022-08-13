@@ -1,39 +1,9 @@
-import React, { useState } from "react";
-import styles from './MyHeader.module.css'
-import axios from 'axios'
-import { add } from '../../app/pokeSlice';
-import { useAppDispatch } from '../../app/hooks'
+import styles from './MyHeader.module.scss'
 import searchpng from './search.png'
-
-interface IfetchedPokemon {
-    name: string,
-    url: string
-}
+import useMyHeaderHook from './MyHeader.hooks'
 
 const MyHeader = () => {
-    const [val, setVal] = useState('');
-    const onChangeHandler = (e: React.ChangeEvent) => {
-        setVal((e?.target as HTMLInputElement).value.toLowerCase())
-    }
-
-    const [input_status, setStatus] = useState('');
-    const dispatch = useAppDispatch();
-    const fetchPokes = async () => {
-        const fetched_poke = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
-        const f = fetched_poke.data.results.find((e: IfetchedPokemon) => e.name === val)
-        if (f) {
-            setStatus('Successfully added pokemon ' + val + ' from text input');
-            const data = await axios.get(f.url);
-            dispatch(add(data));
-        } else {
-            setStatus('No such pokemon ' + val);
-        }
-        (document?.activeElement as HTMLElement).blur();
-    }
-
-    const inputPressEnterHandler = async (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') fetchPokes();
-    }
+    const { fetchPokes, onChangeHandler, input_status, inputPressEnterHandler } = useMyHeaderHook();
 
     return (<header className={styles.myheader}>
         <p>1) Type in pokemon's name (for example pikachu)</p>

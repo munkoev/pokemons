@@ -1,5 +1,4 @@
-import React from 'react';
-import './App.css';
+import './App.scss';
 import MyHeader from './components/MyHeader/MyHeader'
 import PokeList from './components/PokeList/PokeList';
 import PokeSlide from './components/PokeSlide/PokeSlide';

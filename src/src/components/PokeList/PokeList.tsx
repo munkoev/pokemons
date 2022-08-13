@@ -1,4 +1,4 @@
-import styles from './PokeList.module.css'
+import styles from './PokeList.module.scss'
 import PokeCard from '../PokeCard/PokeCard'
 import { useAppSelector } from "../../app/hooks";
 
