@@ -13,6 +13,7 @@ export interface IfetchedPokemon {
 const usePokeSlideHook = () => {
   const [offset, setOffset] = useState(0);
   const [pokes, setPokes] = useState([] as any[]);
+  const [loading, setLoading] = useState(true);
 
   const [slidesNum, setSlidesNum] = useState(
     window.innerWidth < Constants.WIDTH_BREAKPOINT
@@ -32,6 +33,7 @@ const usePokeSlideHook = () => {
 
   useEffect(() => {
     const getPokes = async () => {
+      setLoading(true);
       const fetched_pokes = await Constants.AXIOS_REQUEST.get(
         `?limit=${slidesNum}&offset=${offset}`
       );
@@ -39,6 +41,7 @@ const usePokeSlideHook = () => {
         e.sprite = (await axios.get(e.url)).data.sprites.front_default;
       }
       setPokes(fetched_pokes.data.results);
+      setLoading(false)
     };
     getPokes().catch(console.error);
   }, [offset, slidesNum]);
@@ -60,7 +63,7 @@ const usePokeSlideHook = () => {
     dispatch(add(data));
   };
 
-  return { pokes, onLeftArrClick, onCardClickHandler, onRightArrClick };
+  return { pokes, onLeftArrClick, onCardClickHandler, onRightArrClick, slidesNum, loading };
 };
 
 export default usePokeSlideHook;
