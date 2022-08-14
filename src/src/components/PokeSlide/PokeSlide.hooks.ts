@@ -10,9 +10,18 @@ export interface IfetchedPokemon {
   sprite?: string;
 }
 
+interface IFetchedPokes {
+  data: {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: IfetchedPokemon[];
+  };
+}
+
 const usePokeSlideHook = () => {
   const [offset, setOffset] = useState(0);
-  const [pokes, setPokes] = useState([] as any[]);
+  const [pokes, setPokes] = useState<IfetchedPokemon[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [slidesNum, setSlidesNum] = useState(
@@ -34,9 +43,9 @@ const usePokeSlideHook = () => {
   useEffect(() => {
     const getPokes = async () => {
       setLoading(true);
-      const fetched_pokes = await Constants.AXIOS_REQUEST.get(
+      const fetched_pokes = (await Constants.AXIOS_REQUEST.get(
         `?limit=${slidesNum}&offset=${offset}`
-      );
+      )) as IFetchedPokes;
       for (const e of fetched_pokes.data.results) {
         e.sprite = (await axios.get(e.url)).data.sprites.front_default;
       }

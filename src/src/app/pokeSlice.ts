@@ -2,21 +2,88 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { fetchPokes } from "./pokeActions";
 
+interface nameurl {
+  name: string;
+  url: string;
+}
+
+interface Isprite {
+  back_default?: string | null;
+  back_female?: string | null;
+  back_shiny?: string | null;
+  back_shiny_female?: string | null;
+  front_default?: string | null;
+  front_female?: string | null;
+  front_shiny?: string | null;
+  front_shiny_female?: string | null;
+}
+
 export interface IpokeCard {
   name: string;
   id: number;
   front_default: string;
   abilities: {
-    ability: {
-      name: string;
-      url: string;
-    };
+    ability: nameurl;
     is_hidden: boolean;
     slot: number;
   }[];
 }
 
-interface big extends IpokeCard {}
+export interface IpokeCardBig extends IpokeCard {
+  base_experience: number;
+  forms: nameurl[];
+  game_indices: {
+    game_index: number;
+    version: nameurl;
+  }[];
+  height: number;
+  held_items: {
+    item: nameurl;
+    version_details: {
+      rarity: number;
+      version: nameurl;
+    }[];
+  }[];
+  is_default: boolean;
+  location_area_encounters: string;
+  moves: {
+    move: nameurl;
+    version_group_details: {
+      level_learned_at: number;
+      move_learn_method: nameurl;
+      version_group: nameurl;
+    }[];
+  }[];
+  order: number;
+  past_types: [];
+  species: nameurl;
+  sprites: {
+    back_default: string | null;
+    back_female: string | null;
+    back_shiny: string | null;
+    back_shiny_female: string | null;
+    front_default: string | null;
+    front_female: string | null;
+    front_shiny: string | null;
+    front_shiny_female: string | null;
+    other: {
+      dream_world: Isprite;
+      home: Isprite;
+      "official-artwork": Isprite;
+    };
+    versions: {
+      [key: string]: {
+        [key: string]: Isprite;
+      };
+    };
+  };
+  stats: {
+    base_stat: number;
+    effort: number;
+    stat: nameurl;
+  }[];
+  weight: number;
+}
 
 export type TOperation = "add" | "remove";
 export type TStatus = "Success" | "Fail" | "None";

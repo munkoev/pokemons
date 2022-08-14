@@ -2,8 +2,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IfetchedPokemon } from "../components/PokeSlide/PokeSlide.hooks";
 import * as Constants from "./constants";
+import { IpokeCardBig } from "./pokeSlice";
 
-export const fetchPokes = createAsyncThunk<any, string>(
+export const fetchPokes = createAsyncThunk<IpokeCardBig, string>(
   "fetchPokes",
   async (val, { rejectWithValue }) => {
     try {
@@ -15,7 +16,7 @@ export const fetchPokes = createAsyncThunk<any, string>(
         (e: IfetchedPokemon) => e.name === val
       );
 
-      return (await axios.get(poke.url)) as any;
+      return (await axios.get(poke.url)) as IpokeCardBig;
     } catch {
       throw rejectWithValue(val);
     }
