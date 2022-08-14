@@ -96,6 +96,7 @@ export interface IpokeState {
   status: {
     [key in TOperation]: TStatus;
   };
+  offset: number;
 }
 
 const initialState: IpokeState = {
@@ -106,6 +107,7 @@ const initialState: IpokeState = {
     add: "None",
     remove: "None",
   },
+  offset: 0,
 };
 
 export const pokeSlice = createSlice({
@@ -145,12 +147,15 @@ export const pokeSlice = createSlice({
       state.status.remove = "Success";
       state.lastOperation = "remove";
     },
+    changeOffset: (state, action) => {
+      state.offset += action.payload;
+    },
     hydrate: (state, action) => {
       return action.payload;
     },
   },
 });
 
-export const { add, remove, hydrate } = pokeSlice.actions;
+export const { add, remove, hydrate, changeOffset } = pokeSlice.actions;
 
 export default pokeSlice.reducer;

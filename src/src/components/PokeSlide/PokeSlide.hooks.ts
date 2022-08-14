@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import * as Constants from "../../app/constants";
-import { add } from "../../app/pokeSlice";
+import { add, changeOffset } from "../../app/pokeSlice";
 
 export interface IfetchedPokemon {
   name: string;
@@ -20,7 +20,9 @@ interface IFetchedPokes {
 }
 
 const usePokeSlideHook = () => {
-  const [offset, setOffset] = useState(0);
+  const offset = useAppSelector((state) => {
+    return state.poke.offset;
+  });
   const [pokes, setPokes] = useState<IfetchedPokemon[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -56,13 +58,17 @@ const usePokeSlideHook = () => {
   }, [offset, slidesNum]);
 
   const onLeftArrClick = () => {
-    if (offset !== Constants.OFFSET_MIN) {
-      setOffset(offset - slidesNum);
+    if (offset + slidesNum >= Constants.OFFSET_MIN) {
+      dispatch(changeOffset(-slidesNum));
+    } else {
+      dispatch(changeOffset(Constants.OFFSET_MIN));
     }
   };
   const onRightArrClick = () => {
-    if (offset <= Constants.OFFSET_MAX) {
-      setOffset(offset + slidesNum);
+    if (offset + slidesNum <= Constants.OFFSET_MAX) {
+      dispatch(changeOffset(slidesNum));
+    } else {
+      dispatch(changeOffset(Constants.OFFSET_MAX));
     }
   };
 
