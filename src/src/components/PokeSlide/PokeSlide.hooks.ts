@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../app/hooks";
-import { add } from "../../app/pokeSlice";
 import * as Constants from "../../app/constants";
+import { add } from "../../app/pokeSlice";
 
 export interface IfetchedPokemon {
   name: string;
@@ -41,7 +41,7 @@ const usePokeSlideHook = () => {
         e.sprite = (await axios.get(e.url)).data.sprites.front_default;
       }
       setPokes(fetched_pokes.data.results);
-      setLoading(false)
+      setLoading(false);
     };
     getPokes().catch(console.error);
   }, [offset, slidesNum]);
@@ -63,7 +63,14 @@ const usePokeSlideHook = () => {
     dispatch(add(data));
   };
 
-  return { pokes, onLeftArrClick, onCardClickHandler, onRightArrClick, slidesNum, loading };
+  return {
+    pokes,
+    onLeftArrClick,
+    onCardClickHandler,
+    onRightArrClick,
+    slidesNum,
+    loading,
+  };
 };
 
 export default usePokeSlideHook;

@@ -1,5 +1,5 @@
-import { configureStore } from '@reduxjs/toolkit';
-import pokeReducer from './pokeSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import pokeReducer from "./pokeSlice";
 
 export const store = configureStore({
   reducer: {
@@ -7,8 +7,8 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false
-    })
+      serializableCheck: false,
+    }),
 });
 
 export type AppDispatch = typeof store.dispatch;

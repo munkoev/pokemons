@@ -1,39 +1,37 @@
-import axios from "axios";
 import { useState } from "react";
-import { useAppDispatch } from "../../app/hooks";
-import { add } from "../../app/pokeSlice";
-import { IfetchedPokemon } from "../PokeSlide/PokeSlide.hooks";
-import * as Constants from '../../app/constants'
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import styles from "./MyHeader.module.scss";
+import { fetchPokes as fp } from "../../app/pokeActions";
 
 const useMyHeaderHook = () => {
-    const [val, setVal] = useState('');
-    const onChangeHandler = (e: React.ChangeEvent) => {
-        setVal((e?.target as HTMLInputElement).value.toLowerCase())
+  const { status, lastOperation, lastPoke } = useAppSelector(
+    (state) => state.poke
+  );
+  const [val, setVal] = useState<string>("");
+  const onChangeHandler = (e: React.ChangeEvent) => {
+    setVal((e?.target as HTMLInputElement).value.toLowerCase());
+  };
+  const getStatusData = () => {
+    if (!lastOperation) {
+      return [];
     }
+    const successText = `Successfuly ${lastOperation} ${lastPoke}`;
+    const failText = `Failed to ${lastOperation} ${lastPoke}`;
+    return status[lastOperation] === "Success"
+      ? [successText, styles.success]
+      : [failText, styles.fail];
+  };
 
-    const [input_status, setStatus] = useState('');
-    const dispatch = useAppDispatch();
-    const fetchPokes = async () => {
-        await Constants.AXIOS_REQUEST.get('?limit=100000&offset=0')
-            .then(result => {
-                return result.data.results.find((e: IfetchedPokemon) => e.name === val);
-            })
-            .then(result => {
-                return axios.get(result.url)
-            })
-            .then(result => {
-                setStatus('Successfully added pokemon ' + val + ' from text input');
-                dispatch(add(result));
-            })
-            .catch(e => {
-                setStatus('Pokemon ' + val + ' not found');
-            })
-    }
-    
-    const inputPressEnterHandler = async (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') fetchPokes();
-    }
-    return { fetchPokes, onChangeHandler, input_status, inputPressEnterHandler }
-}
+  const dispatch = useAppDispatch();
+  const fetchPokes = () => {
+    dispatch(fp(val));
+  };
+
+  const inputPressEnterHandler = async (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") fetchPokes();
+  };
+
+  return { fetchPokes, onChangeHandler, inputPressEnterHandler, getStatusData };
+};
 
 export default useMyHeaderHook;

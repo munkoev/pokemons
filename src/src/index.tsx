@@ -1,40 +1,36 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
-import App from './App';
-import './index.scss';
-import { hydrate } from './app/pokeSlice';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+import App from "./App";
+import "./index.scss";
+import { hydrate } from "./app/pokeSlice";
 
-const container = document.getElementById('root')!;
+const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 store.subscribe(() => {
-  localStorage.setItem('poke-redux', JSON.stringify(store.getState().poke))
-})
+  localStorage.setItem("poke-redux", JSON.stringify(store.getState().poke));
+});
 
 const getFromLocalStorage = () => {
-  try { 
-    const persistedState = localStorage.getItem('poke-redux') 
-    if (persistedState) 
-      return JSON.parse(persistedState)
+  try {
+    const persistedState = localStorage.getItem("poke-redux");
+    if (persistedState) return JSON.parse(persistedState);
+  } catch (e) {
+    console.log(e);
   }
-  catch (e){ 
-    console.log(e)
-  }
-}
+};
 
-const pokes = getFromLocalStorage()
-if(pokes){
-  store.dispatch(hydrate(pokes))
+const pokes = getFromLocalStorage();
+if (pokes) {
+  store.dispatch(hydrate(pokes));
 }
 
 root.render(
   <React.StrictMode>
-
-      <Provider store={store}>
-        <App />
-      </Provider>
-
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
